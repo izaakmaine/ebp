@@ -1,0 +1,51 @@
+version: '3'
+
+tasks:
+  build:
+    desc: Build the ebp binary
+    cmds:
+      - go build -o bin/ebp ./cmd/ebp
+
+  build-mcp:
+    desc: Build the ebp-mcp binary
+    cmds:
+      - go build -o bin/ebp-mcp ./cmd/ebp-mcp
+
+  run:
+    desc: Run the ebp binary
+    deps: [build]
+    cmds:
+      - ./bin/ebp
+
+  test:
+    desc: Run all tests
+    cmds:
+      - go test ./...
+
+  test-verbose:
+    desc: Run all tests with verbose output
+    cmds:
+      - go test -v ./...
+
+  lint:
+    desc: Run go vet
+    cmds:
+      - go vet ./...
+
+  tidy:
+    desc: Run go mod tidy
+    cmds:
+      - go mod tidy
+
+  clean:
+    desc: Clean build artifacts
+    cmds:
+      - rm -rf bin/
+
+  check:
+    desc: Run all checks (build, test, lint)
+    cmds:
+      - task: build
+      - task: build-mcp
+      - task: test
+      - task: lint
